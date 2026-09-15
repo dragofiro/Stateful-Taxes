@@ -1,0 +1,1 @@
+Georgia has personal income taxes.

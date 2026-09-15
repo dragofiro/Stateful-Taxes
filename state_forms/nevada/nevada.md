@@ -1,0 +1,1 @@
+Nevada does not have personal income taxes.

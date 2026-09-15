@@ -1,0 +1,1 @@
+Alaska does not have personal income taxes.

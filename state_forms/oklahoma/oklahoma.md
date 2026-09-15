@@ -1,0 +1,1 @@
+Oklahoma has personal income taxes.

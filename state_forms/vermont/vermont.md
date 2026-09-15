@@ -1,0 +1,1 @@
+Vermont has personal income taxes.

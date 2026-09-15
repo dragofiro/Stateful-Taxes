@@ -1,0 +1,1 @@
+New Mexico has personal income taxes.

@@ -1,0 +1,1 @@
+New Hampshire does not have personal income taxes.

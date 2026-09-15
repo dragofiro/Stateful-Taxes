@@ -1,0 +1,1 @@
+Michigan has personal income taxes.

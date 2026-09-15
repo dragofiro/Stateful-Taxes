@@ -1,0 +1,1 @@
+West Virginia has personal income taxes.

@@ -1,0 +1,1 @@
+New Jersey has personal income taxes.

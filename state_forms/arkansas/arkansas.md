@@ -1,0 +1,1 @@
+Arkansas has personal income taxes.

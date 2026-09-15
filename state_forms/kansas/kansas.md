@@ -1,0 +1,1 @@
+Kansas has personal income taxes.

@@ -1,0 +1,1 @@
+Wyoming does not have personal income taxes.

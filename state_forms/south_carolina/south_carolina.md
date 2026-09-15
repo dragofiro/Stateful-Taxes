@@ -1,0 +1,1 @@
+South Carolina has personal income taxes.

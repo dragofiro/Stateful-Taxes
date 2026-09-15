@@ -1,0 +1,1 @@
+Kentucky has personal income taxes.

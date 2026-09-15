@@ -1,0 +1,1 @@
+The district of Colombia has personal income taxes.

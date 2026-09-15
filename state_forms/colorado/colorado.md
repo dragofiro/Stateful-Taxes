@@ -1,0 +1,1 @@
+Colorado has personal income taxes.

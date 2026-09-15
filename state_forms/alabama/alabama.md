@@ -1,0 +1,1 @@
+Alabama has personal income taxes.

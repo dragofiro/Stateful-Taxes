@@ -1,0 +1,1 @@
+Washington taxes some capital gains but not all. 
