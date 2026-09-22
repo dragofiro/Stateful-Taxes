@@ -1,7 +1,6 @@
 ### Indiana has personal income taxes.
 
 ## Important Forms:
-
 Form IT-40
 
 Form IT-40 PNR
