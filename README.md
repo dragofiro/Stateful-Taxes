@@ -7,4 +7,6 @@ There are a lot of options for US citizens to file their federal taxes for free.
 The tax forms that we use are drawn directly from the state websites listed on [taxadmin.org](https://taxadmin.org/state-tax-forms/) and can be checked at any time by going to the state_forms folder, and finding your state and file.
 
 ### User Guide
+Important: This project is not officially licensed by the IRS or any US governmental service. This project is not meant to complete electronic filing, and will only give users a printable pdf that can be mailed in for state tax returns. 
+
 To use this project for viewing and selecting files to print and fill out by hand, go to the state_forms folder, select your state, and open the state_name.md file. Each .md file contains a brief description of every form for that state as well as who should be using this form (Full vs Part vs Non Residents). 
