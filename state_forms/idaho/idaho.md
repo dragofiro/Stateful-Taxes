@@ -1,6 +1,7 @@
 ### Iadho has personal income taxes.
 
 ## Important Forms:
+
 Form 24 - For Full/Part Residents: The food tax credit refund form and instructions.
 
 Form 39R - For Full Residents to be filled out in addition to Form 40: The resident supplemental schedule used alongside Form 43 for certain adjustments or additions.
