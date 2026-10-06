@@ -3,6 +3,7 @@
 (Note: New York City individual income tax is calculated directly on New York State Form IT-201 or IT-203, but city-specific schedules and unincorporated business taxes exist).   
 
 ## Important Forms:
+
 Form IT-201 (NYC Section) - For Full Residents: City personal income tax is calculated directly on lines 47–52 of the main New York State resident income tax return.   
 
 Form IT-360.1 - For Part Residents: Used to calculate New York City personal income tax for individuals who changed NYC residence during the tax year.   
