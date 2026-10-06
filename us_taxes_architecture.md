@@ -13,4 +13,4 @@ they already have a state forms form but it is very bare bones and doesn't seem 
 
 having a hard time differentiating between the browser based code and the desktop app code nvm found the relevant files in components
 
-
+they initialize from index.js->app.tsx->main.tsx for redux persistence routing -> global themes -> UI Components
