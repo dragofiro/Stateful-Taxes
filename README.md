@@ -1,12 +1,16 @@
-# Stateful-Taxes
-## What is Stateful Taxes?
-Stateful Taxes is an open-source project dedicated to providing free, open-source tax filing for state level taxes across America.
+# React + Vite
 
-There are a lot of options for US citizens to file their federal taxes for free. Despite this, there is still no way to file state taxes in an easy, digital, and free (as in beer) way. We are dedicated to making a free, comprehensive, state-tax filing service that works for all 50 states, and as many US territories as possible, while keeping personal information out of the equation.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-The tax forms that we use are drawn directly from the state websites listed on [taxadmin.org](https://taxadmin.org/state-tax-forms/) and can be checked at any time by going to the state_forms folder, and finding your state and file.
+Currently, two official plugins are available:
 
-### User Guide
-Important: This project is not officially licensed by the IRS or any US governmental service. This project is not meant to complete electronic filing, and will only give users a printable pdf that can be mailed in for state tax returns. 
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-To use this project for viewing and selecting files to print and fill out by hand, go to the state_forms folder, select your state, and open the state_name.md file. Each .md file contains a brief description of every form for that state as well as who should be using this form (Full vs Part vs Non Residents). 
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
