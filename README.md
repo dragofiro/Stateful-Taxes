@@ -1,4 +1,5 @@
 # Stateful-Taxes
+___
 ## What is Stateful Taxes?
 Stateful Taxes is an open-source project dedicated to providing free, open-source tax filing for state level taxes across America.
 
@@ -6,6 +7,7 @@ There are a lot of options for US citizens to file their federal taxes for free.
 
 The tax forms that we use are drawn directly from the state websites listed on [taxadmin.org](https://taxadmin.org/state-tax-forms/) and can be checked at any time by going to the state_forms folder, and finding your state and file.
 
+___
 ### User Guide
 Important: This project is not officially licensed by the IRS or any US governmental service. This project is not meant to complete electronic filing, and will only give users a printable pdf that can be mailed in for state tax returns. 
 

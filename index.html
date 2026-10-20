@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .mobile-only {
+            display: none;
+        }
+      @media screen and (max-width: 767px) {
+        .mobile-only {
+          display: block;
+        }
+      }
+    </style>
+    <title>Stateful Taxes</title>
+  </head>
+  <body>
+    <div class="mobile-only">
+      This project does not support mobile devices, please use a desktop or laptop computer to access the application (You should not be doing taxes on a mobile device). 
+      If you are on desktop and can see this content, please maximize your browser window.
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
