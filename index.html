@@ -13,9 +13,25 @@
         }
       }
     </style>
-    <title>Stateful Taxes</title>
+    <title>Stateful Taxes — 100% Local State Income Tax Filing</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              slate: {
+                850: '#151e32',
+                950: '#0a0f1d',
+              }
+            }
+          }
+        }
+      }
+    </script>
   </head>
-  <body>
+  <body class="bg-slate-950 text-slate-100 antialiased selection:bg-indigo-500 selection:text-white min-h-screen">
     <div class="mobile-only">
       This project does not support mobile devices, please use a desktop or laptop computer to access the application (You should not be doing taxes on a mobile device). 
       If you are on desktop and can see this content, please maximize your browser window.
