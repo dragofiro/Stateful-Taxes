@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 // Mock state list for the directory (/src/components/states)
 const STATES = [
   { name: 'New York', code: 'NY', form: 'IT-201', status: 'Available' },
- /* { name: 'California', code: 'CA', form: 'Form 540', status: 'Available' },
-  { name: 'Massachusetts', code: 'MA', form: 'Form 1', status: 'Available' },
-  { name: 'Connecticut', code: 'CT', form: 'CT-1040', status: 'Available' },
-  { name: 'New Jersey', code: 'NJ', form: 'NJ-1040', status: 'Available' },
+  { name: 'California', code: 'CA', form: 'Form 540', status: 'Coming Soon' },
+  { name: 'Massachusetts', code: 'MA', form: 'Form 1', status: 'Coming Soon' },
+  { name: 'Connecticut', code: 'CT', form: 'CT-1040', status: 'Coming Soon' },
+  { name: 'New Jersey', code: 'NJ', form: 'NJ-1040', status: 'Coming Soon' },
   { name: 'Pennsylvania', code: 'PA', form: 'PA-40', status: 'Coming Soon' },
   { name: 'Texas', code: 'TX', form: 'No State Income Tax', status: 'N/A' },
-  { name: 'Florida', code: 'FL', form: 'No State Income Tax', status: 'N/A' },*/
+  { name: 'Florida', code: 'FL', form: 'No State Income Tax', status: 'N/A' },
 ];
 
 export function App() {
