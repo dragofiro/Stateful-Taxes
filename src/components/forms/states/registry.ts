@@ -1,56 +1,56 @@
-/*import { AKStateForm } from './AK';
-import { ALStateForm } from './AL';
-import { ARStateForm } from './AR';
-import { AZStateForm } from './AZ';
-import { CAStateForm } from './CA';
-import { COStateForm } from './CO';
-import { CTStateForm } from './CT';
-import { DEStateForm } from './DE';
-import { FLStateForm } from './FL';
-import { GAStateForm } from './GA';
-import { HIStateForm } from './HI';
-import { IAStateForm } from './IA';
-import { IDStateForm } from './ID';
-import { ILStateForm } from './IL';
-import { INStateForm } from './IN';
-import { KSStateForm } from './KS';
-import { KYStateForm } from './KY';
-import { LAStateForm } from './LA';
-import { MAStateForm } from './MA';
-import { MDStateForm } from './MD';
-import { MEStateForm } from './ME';
-import { MIStateForm } from './MI';
-import { MNStateForm } from './MN';
-import { MOStateForm } from './MO';
-import { MSStateForm } from './MS';
-import { MTStateForm } from './MT';
-import { NCStateForm } from './NC';
-import { NDStateForm } from './ND';
-import { NEStateForm } from './NE';
-import { NHStateForm } from './NH';
-import { NJStateForm } from './NJ';
-import { NMStateForm } from './NM';
-import { NVStateForm } from './NV';
-import { NYStateForm } from './NY';
-import { OHStateForm } from './OH';
-import { OKStateForm } from './OK';
-import { ORStateForm } from './OR';
-import { PAStateForm } from './PA';
-import { RIStateForm } from './RI';
-import { SCStateForm } from './SC';
-import { SDStateForm } from './SD';
-import { TNStateForm } from './TN';
-import { TXStateForm } from './TX';
-import { UTStateForm } from './UT';
-import { VAStateForm } from './VA';
-import { VTStateForm } from './VT';
-import { WAStateForm } from './WA';
-import { WIStateForm } from './WI';
-import { WVStateForm } from './WV';
-import { WYStateForm } from './WY';
+/*import { AKStateForm } from './AK/index.tsx';
+import { ALStateForm } from './AL/index.tsx';
+import { ARStateForm } from './AR/index.tsx';
+import { AZStateForm } from './AZ/index.tsx';
+import { CAStateForm } from './CA/index.tsx';
+import { COStateForm } from './CO/index.tsx';
+import { CTStateForm } from './CT/index.tsx';
+import { DEStateForm } from './DE/index.tsx';
+import { FLStateForm } from './FL/index.tsx';
+import { GAStateForm } from './GA/index.tsx';
+import { HIStateForm } from './HI/index.tsx';
+import { IAStateForm } from './IA/index.tsx';
+import { IDStateForm } from './ID/index.tsx';
+import { ILStateForm } from './IL/index.tsx';
+import { INStateForm } from './IN/index.tsx';
+import { KSStateForm } from './KS/index.tsx';
+import { KYStateForm } from './KY/index.tsx';
+import { LAStateForm } from './LA/index.tsx';
+import { MAStateForm } from './MA/index.tsx';
+import { MDStateForm } from './MD/index.tsx';
+import { MEStateForm } from './ME/index.tsx';
+import { MIStateForm } from './MI/index.tsx';
+import { MNStateForm } from './MN/index.tsx';
+import { MOStateForm } from './MO/index.tsx';
+import { MSStateForm } from './MS/index.tsx';
+import { MTStateForm } from './MT/index.tsx';
+import { NCStateForm } from './NC/index.tsx';
+import { NDStateForm } from './ND/index.tsx';
+import { NEStateForm } from './NE/index.tsx';
+import { NHStateForm } from './NH/index.tsx';
+import { NJStateForm } from './NJ/index.tsx';
+import { NMStateForm } from './NM/index.tsx';
+import { NVStateForm } from './NV/index.tsx';*/
+import { NYStateForm } from './NY/index.tsx';
+/*import { OHStateForm } from './OH/index.tsx';
+import { OKStateForm } from './OK/index.tsx';
+import { ORStateForm } from './OR/index.tsx';
+import { PAStateForm } from './PA/index.tsx';
+import { RIStateForm } from './RI/index.tsx';
+import { SCStateForm } from './SC/index.tsx';
+import { SDStateForm } from './SD/index.tsx';
+import { TNStateForm } from './TN/index.tsx';
+import { TXStateForm } from './TX/index.tsx';
+import { UTStateForm } from './UT/index.tsx';
+import { VAStateForm } from './VA/index.tsx';
+import { VTStateForm } from './VT/index.tsx';
+import { WAStateForm } from './WA/index.tsx';
+import { WIStateForm } from './WI/index.tsx';
+import { WVStateForm } from './WV/index.tsx';
+import { WYStateForm } from './WY/index.tsx';*/
 
 export const STATE_REGISTRY = {
-  AK: { name: 'Alaska', code: 'AK', formName: 'Form Form', component: AKStateForm, status: 'Available' },
+  /*AK: { name: 'Alaska', code: 'AK', formName: 'Form Form', component: AKStateForm, status: 'Available' },
   AL: { name: 'Alabama', code: 'AL', formName: 'Form 40', component: ALStateForm, status: 'Available' },
   AR: { name: 'Arkansas', code: 'AR', formName: 'Form AR1000F', component: ARStateForm, status: 'Available' },
   AZ: { name: 'Arizona', code: 'AZ', formName: 'Form 140', component: AZStateForm, status: 'Available' },
@@ -82,9 +82,9 @@ export const STATE_REGISTRY = {
   NH: { name: 'New Hampshire', code: 'NH', formName: 'None', component: NHStateForm, status: 'Available' },
   NJ: { name: 'New Jersey', code: 'NJ', formName: 'Form NJ-1040', component: NJStateForm, status: 'Available' },
   NM: { name: 'New Mexico', code: 'NM', formName: 'Form PIT-1', component: NMStateForm, status: 'Available' },
-  NV: { name: 'Nevada', code: 'NV', formName: 'None', component: NVStateForm, status: 'Available' },
+  NV: { name: 'Nevada', code: 'NV', formName: 'None', component: NVStateForm, status: 'Available' },*/
   NY: { name: 'New York', code: 'NY', formName: 'IT-201', component: NYStateForm, status: 'Available' },
-  OH: { name: 'Ohio', code: 'OH', formName: 'Form IT 1040', component: OHStateForm, status: 'Available' },
+/*  OH: { name: 'Ohio', code: 'OH', formName: 'Form IT 1040', component: OHStateForm, status: 'Available' },
   OK: { name: 'Oklahoma', code: 'OK', formName: 'Form 511', component: OKStateForm, status: 'Available' },
   OR: { name: 'Oregon', code: 'OR', formName: 'Form OR-40', component: ORStateForm, status: 'Available' },
   PA: { name: 'Pennsylvania', code: 'PA', formName: 'Form PA-40', component: PAStateForm, status: 'Available' },
@@ -100,5 +100,17 @@ export const STATE_REGISTRY = {
   WI: { name: 'Wisconsin', code: 'WI', formName: 'Form 1', component: WIStateForm, status: 'Available' },
   WV: { name: 'West Virginia', code: 'WV', formName: 'Form IT-140', component: WVStateForm, status: 'Available' },
   WY: { name: 'Wyoming', code: 'WY', formName: 'None', component: WYStateForm, status: 'Available' },
-};
 */
+};
+
+
+export interface StateDefinition {
+  name: string;
+  code: string;
+  formName: string;
+  stateFolder: string; // matches folder name in /public/state_forms/2026/
+  pdfFilename: string; // PDF file name
+  schema: Record<string, string>;
+  component: React.ComponentType;
+  status: 'Available' | 'Coming Soon' | 'N/A';
+}

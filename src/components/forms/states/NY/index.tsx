@@ -1,10 +1,10 @@
 import React from 'react';
-import { useTaxContext } from '../../../../context/TaxContext'; // Assuming context setup
-import { FormWrapper } from '../../bases/form_wrapper';
-import { InputField } from '../../bases/input_field';
-import { SelectField } from '../../bases/select_field';
-import { FullNameField } from '../../fields/full_name';
-import { HomeAddressField } from '../../fields/home_address';
+import { useTaxContext } from '../../../../context/tax_context.tsx'; // Assuming context setup
+import { FormWrapper } from '../../bases/form_wrapper.tsx';
+import { InputField } from '../../bases/input_field.tsx';
+import { SelectField } from '../../bases/select_field.tsx';
+import { FullNameField } from '../../fields/full_name.tsx';
+import { HomeAddressField } from '../../fields/home_address.tsx';
 
 export const NYStateForm: React.FC = () => {
   // Connected to centralized local store (TaxContext)
