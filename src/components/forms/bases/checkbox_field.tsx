@@ -1,3 +1,5 @@
+
+// adds a simple checkbox for form construction
 import React from 'react';
 
 interface CheckboxFieldProps {

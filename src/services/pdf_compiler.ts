@@ -1,3 +1,4 @@
+// Compiles info entered into the official tax AcroForms for easy download, export, and printing.
 import { PDFDocument, PDFTextField, PDFCheckBox, PDFRadioGroup } from 'pdf-lib';
 
 export interface CompilePdfOptions {

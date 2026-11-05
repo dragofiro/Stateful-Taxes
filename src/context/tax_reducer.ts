@@ -1,3 +1,4 @@
+// Manages the state tree for individual tax information and form data
 export interface TaxState {
   personalInfo: {
     firstName: string;
@@ -93,3 +94,4 @@ export function taxReducer(state: TaxState, action: TaxAction): TaxState {
       return state;
   }
 }
+

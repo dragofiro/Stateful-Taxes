@@ -1,3 +1,5 @@
+
+// Provides the context for managing tax state and form data throughout the application
 import React, { createContext, useContext, useEffect, useReducer, type ReactNode } from 'react';
 import { taxReducer, initialTaxState, type TaxState, type TaxAction } from './tax_reducer.ts';
 
