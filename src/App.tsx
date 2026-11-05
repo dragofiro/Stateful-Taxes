@@ -1,3 +1,4 @@
+// Main application component for Stateful Taxes
 import React, { useState } from 'react';
 
 // Mock state list for the directory (/src/components/states)
