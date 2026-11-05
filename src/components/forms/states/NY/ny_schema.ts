@@ -1,4 +1,4 @@
-import { NYTaxFormValues } from './ny_types';
+import { type NYTaxFormValues } from './ny_types.ts';
 
 export const NY_PDF_SCHEMA: Record<keyof NYTaxFormValues, string> = {
   firstName: 'TopmostSubform[0].Page1[0].Filer_FirstName[0]',
