@@ -75,7 +75,7 @@ export async function compileAndDownloadPdf({
     const pdfBytes = await pdfDoc.save();
 
     // 6. Trigger client-side browser download without sending data to any server
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
     const downloadUrl = URL.createObjectURL(blob);
 
     const downloadAnchor = document.createElement('a');
