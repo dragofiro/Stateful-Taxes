@@ -15,3 +15,9 @@ Important: This project is not officially licensed by the IRS or any US governme
 This project keeps all information local to your computer and will never take any information outside of your computer. To make recovering your progress easier in the event of a user working on multiple computers, we have added a json download option to allow users to store their in progress forms or last years forms to instantly repopulate most of the basic fields.
 
 To use this project for viewing and selecting files to print and fill out by hand, go to the state_forms folder, select your state, and open the state_name.md file. Each .md file contains a brief description of every form for that state as well as who should be using this form (Full vs Part vs Non Residents). 
+### Landing page map
+The landing page map and state flags are static files in the repo, so the page sends no request to any outside server. You only need to rebuild them if the map or a flag changes.
+
+To rebuild the map outlines in `src/components/landing/us_map_data.ts`, run `npm run assets:landing`.
+
+To rebuild the flags in `public/flags/`, put the flag SVGs in one folder (named `us-co.svg`, `us-tx.svg` and so on) and run `npm run assets:landing -- path/to/folder`.
