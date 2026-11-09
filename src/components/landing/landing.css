@@ -1,0 +1,203 @@
+/* Landing page. Everything is scoped under .lp so it does not touch the dark app styles. */
+.lp {
+  --lp-paper: #ffffff;
+  --lp-ink: #0e1116;
+  --lp-muted: #5b6270;
+  --lp-display: 'Newsreader Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --lp-sans: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  --lp-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  background: var(--lp-paper);
+  color: var(--lp-ink);
+  font-family: var(--lp-sans);
+}
+body.lp-body {
+  background: #ffffff;
+}
+
+/* The hero is taller than the screen. Its sticky stage stays put while the scroll drives --p and --blur. */
+.lp-hero {
+  position: relative;
+  height: 260vh;
+}
+.lp-stage {
+  --p: 0;
+  --blur: 1.4;
+  --cue: 1;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.lp-map-wrap {
+  position: absolute;
+  left: 50%;
+  top: calc(11% + 8% * var(--p));
+  width: min(calc(80vw - 6vw * var(--p)), 121vh);
+  transform: translateX(-50%);
+}
+.lp-map {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: blur(calc(var(--blur) * 1vw));
+}
+.lp-shape {
+  fill: transparent;
+  stroke: var(--lp-ink);
+  stroke-width: 0.9px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: all;
+}
+.lp-stage[data-clear='true'] .lp-shape--file {
+  cursor: pointer;
+}
+.lp-shape:focus {
+  outline: none;
+}
+.lp-shape:focus-visible {
+  stroke-width: 2.5px;
+}
+circle.lp-shape {
+  fill: var(--lp-paper);
+}
+.lp-flag {
+  pointer-events: none;
+}
+.lp-active-outline {
+  fill: none;
+  stroke: var(--lp-ink);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+.lp-extra {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.lp-stage[data-clear='true'] .lp-extra {
+  opacity: 1;
+}
+.lp-leader {
+  stroke: var(--lp-ink);
+  stroke-width: 0.8px;
+  vector-effect: non-scaling-stroke;
+}
+.lp-map-label {
+  fill: var(--lp-ink);
+  font-family: var(--lp-mono);
+  font-size: 10px;
+}
+
+/* One line at every width: the size shrinks with the viewport instead of wrapping. */
+.lp-headline {
+  position: absolute;
+  left: 50%;
+  top: calc(47% - 38% * var(--p));
+  z-index: 2;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  font-family: var(--lp-display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: calc(4.6vw - 1.6vw * var(--p));
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: var(--lp-ink);
+  pointer-events: none;
+}
+.lp-hint,
+.lp-scroll-cue {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  margin: 0;
+  text-align: center;
+  font-family: var(--lp-mono);
+  text-transform: uppercase;
+  color: var(--lp-muted);
+  pointer-events: none;
+}
+.lp-hint {
+  top: 14.5%;
+  font-size: clamp(10px, 0.9vw, 13px);
+  letter-spacing: 0.08em;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.lp-stage[data-clear='true'] .lp-hint {
+  opacity: 1;
+}
+.lp-scroll-cue {
+  bottom: 4%;
+  font-size: clamp(10px, 0.85vw, 12px);
+  letter-spacing: 0.14em;
+  opacity: var(--cue);
+}
+.lp-scroll-cue::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 36px;
+  margin: 8px auto 0;
+  background: currentColor;
+}
+
+.lp-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.lp-popup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  padding: 0.55em 0.8em;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #000000;
+  font-family: var(--lp-sans);
+  font-size: 15px;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12), 0 6px 18px rgba(0, 0, 0, 0.14);
+  pointer-events: none;
+}
+.lp-popup[hidden] {
+  display: none;
+}
+.lp-popup b {
+  font-weight: 600;
+}
+
+.lp-footer {
+  display: grid;
+  gap: 8px;
+  max-width: 68ch;
+  margin: 0 auto;
+  padding: 32px 16px 48px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--lp-muted);
+  text-align: center;
+}
+.lp-footer p {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-extra,
+  .lp-hint {
+    transition: none;
+  }
+}
