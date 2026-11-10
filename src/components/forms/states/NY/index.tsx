@@ -2,13 +2,19 @@ import React from 'react';
 import { useTaxContext } from '../../../../context/tax_context.tsx';
 import { FormWrapper } from '../../bases/form_wrapper.tsx';
 import { FormSection } from '../../bases/form_section.tsx';
-import { InputField } from '../../bases/input_field.tsx';
 import { CurrencyField } from '../../bases/currency_field.tsx';
 import { SelectField } from '../../bases/select_field.tsx';
+
 import { PrimaryInfoField } from '../../fields/primary_info.tsx';
+import { SpouseInfoField } from '../../fields/spouse_info.tsx';
 import { HomeAddressField } from '../../fields/home_address.tsx';
-import { compileAndDownloadPdf } from '../../../../services/pdf_compiler.tsx';
-import { NY_PDF_SCHEMA } from './ny_schema.tsx';
+import { MailingAddressField } from '../../fields/mailing_address.tsx';
+import { DependantInfoField } from '../../fields/dependant_info.tsx';
+import { EmployerWitholdingField } from '../../fields/employer_witholding.tsx';
+import { BankAccountInfoField } from '../../fields/bank_account_info.tsx';
+
+import { compileAndDownloadPdf } from '../../../../services/pdf_compiler.ts';
+import { NY_PDF_SCHEMA } from './ny_schema.ts';
 
 export const NYStateForm: React.FC = () => {
   const { state, updatePersonalInfo, updateFilingStatus, updateIncome, updatePayments } = useTaxContext();
@@ -19,6 +25,7 @@ export const NYStateForm: React.FC = () => {
       filingStatus: state.filingStatus,
       ...state.income,
       ...state.payments,
+      ...state.bankInfo,
     };
 
     try {
@@ -43,40 +50,10 @@ export const NYStateForm: React.FC = () => {
     >
       <div className="space-y-6">
         
-        {/* Section 1: Personal Info */}
+        {/* Step 1: Filing Status */}
         <FormSection
-          title="Step 1: Taxpayer Information"
-          description="Enter your legal identification and residency details as of December 31."
-        >
-          <PrimaryInfoField />
-          <HomeAddressField />
-          
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <InputField
-              label="County of Residence"
-              placeholder="e.g. Albany"
-              value={state.personalInfo.countyOfResidence}
-              onChange={(e) => updatePersonalInfo({ countyOfResidence: e.target.value })}
-            />
-            <InputField
-              label="School District Name"
-              placeholder="e.g. Albany City SD"
-              value={state.personalInfo.schoolDistrictName || ''}
-              onChange={(e) => updatePersonalInfo({ schoolDistrictName: e.target.value })}
-            />
-            <InputField
-              label="School District Code"
-              placeholder="e.g. 051"
-              value={state.personalInfo.schoolDistrictCode}
-              onChange={(e) => updatePersonalInfo({ schoolDistrictCode: e.target.value })}
-            />
-          </div>
-        </FormSection>
-
-        {/* Section 2: Filing Status & Questions */}
-        <FormSection
-          title="Step 2: Filing Status & Special Conditions"
-          description="Select your filing status and answer required residency and compliance questions."
+          title="Step 1: Filing Status & Residency"
+          description="Select your filing status and general tax parameters."
         >
           <SelectField
             label="Filing Status"
@@ -90,69 +67,74 @@ export const NYStateForm: React.FC = () => {
               { label: '5 - Qualifying widow(er) with dependent child', value: '5' },
             ]}
           />
+        </FormSection>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-            <SelectField
-              label="Itemized deductions on federal return?"
-              value={state.personalInfo.itemizedDeductionsFederal || 'no'}
+        {/* Step 2: Personal Identification */}
+        <FormSection
+          title="Step 2: Primary Taxpayer Information"
+          description="Enter your personal identification details."
+        >
+          <PrimaryInfoField />
+          
+          {/* Conditional Spouse Block for Joint Returns */}
+          {(state.filingStatus === '2' || state.filingStatus === '3') && (
+            <SpouseInfoField />
+          )}
+        </FormSection>
+
+        {/* Step 3: Address Information */}
+        <FormSection
+          title="Step 3: Addresses"
+          description="Provide your permanent home address and mailing address."
+        >
+          <HomeAddressField />
+          <MailingAddressField />
+        </FormSection>
+
+        {/* Step 4: Dependents */}
+        <FormSection
+          title="Step 4: Dependents (Item H)"
+          description="List any qualifying dependents to claim exemptions."
+        >
+          <DependantInfoField />
+        </FormSection>
+
+        {/* Step 5: W-2 & Income */}
+        <FormSection
+          title="Step 5: Income & Employer Withholding"
+          description="Enter figures from your Federal return and W-2 statements."
+        >
+          <EmployerWitholdingField />
+
+          <div className="pt-4 space-y-4 border-t border-slate-800">
+            <CurrencyField
+              label="Federal Adjusted Gross Income (AGI)"
+              value={state.income.federalAdjustedGrossIncome}
               onChange={(e) =>
-                updatePersonalInfo({
-                  itemizedDeductionsFederal: e.target.value as 'yes' | 'no',
-                })
+                updateIncome({ federalAdjustedGrossIncome: parseFloat(e.target.value) || 0 })
               }
-              options={[
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-              ]}
             />
-            <SelectField
-              label="Claimed as dependent on another return?"
-              value={state.personalInfo.claimedAsDependent || 'no'}
-              onChange={(e) =>
-                updatePersonalInfo({
-                  claimedAsDependent: e.target.value as 'yes' | 'no',
-                })
-              }
-              options={[
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-              ]}
-            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <CurrencyField
+                label="New York Additions"
+                value={state.income.nyAdditions}
+                onChange={(e) => updateIncome({ nyAdditions: parseFloat(e.target.value) || 0 })}
+              />
+              <CurrencyField
+                label="New York Subtractions"
+                value={state.income.nySubtractions}
+                onChange={(e) => updateIncome({ nySubtractions: parseFloat(e.target.value) || 0 })}
+              />
+            </div>
           </div>
         </FormSection>
 
-        {/* Section 3: Income & Adjustments */}
+        {/* Step 6: Direct Deposit & Banking */}
         <FormSection
-          title="Step 3: Federal Income & Adjustments"
-          description="Report your income figures from your federal return and state modifications."
+          title="Step 6: Direct Deposit & Payments"
+          description="Provide bank account details for refund direct deposit or balance payment."
         >
-          <CurrencyField
-            label="Federal Adjusted Gross Income (AGI)"
-            value={state.income.federalAdjustedGrossIncome}
-            onChange={(e) =>
-              updateIncome({ federalAdjustedGrossIncome: parseFloat(e.target.value) || 0 })
-            }
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <CurrencyField
-              label="New York Additions"
-              value={state.income.nyAdditions}
-              onChange={(e) => updateIncome({ nyAdditions: parseFloat(e.target.value) || 0 })}
-            />
-            <CurrencyField
-              label="New York Subtractions"
-              value={state.income.nySubtractions}
-              onChange={(e) => updateIncome({ nySubtractions: parseFloat(e.target.value) || 0 })}
-            />
-          </div>
-        </FormSection>
-
-        {/* Section 4: Payments, Refunds & Direct Deposit */}
-        <FormSection
-          title="Step 4: Payments, Tax Withheld & Refund Options"
-          description="Enter total state tax withheld and specify refund or direct deposit preferences."
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <CurrencyField
               label="New York State Tax Withheld"
               value={state.payments.stateTaxWithheld}
@@ -168,29 +150,7 @@ export const NYStateForm: React.FC = () => {
               }
             />
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-            <SelectField
-              label="Refund Choice"
-              value={state.payments.refundChoice || 'direct_deposit'}
-              onChange={(e) => updatePayments({ refundChoice: e.target.value })}
-              options={[
-                { label: 'Direct Deposit', value: 'direct_deposit' },
-                { label: 'Paper Check', value: 'paper_check' },
-              ]}
-            />
-            <SelectField
-              label="Bank Account Type (Line 83a)"
-              value={state.payments.accountType || 'personal_checking'}
-              onChange={(e) => updatePayments({ accountType: e.target.value })}
-              options={[
-                { label: 'Personal Checking', value: 'personal_checking' },
-                { label: 'Personal Savings', value: 'personal_savings' },
-                { label: 'Business Checking', value: 'business_checking' },
-                { label: 'Business Savings', value: 'business_savings' },
-              ]}
-            />
-          </div>
+          <BankAccountInfoField />
         </FormSection>
 
       </div>
