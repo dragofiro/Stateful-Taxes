@@ -5,7 +5,7 @@ import { FormSection } from '../../bases/form_section.tsx';
 import { InputField } from '../../bases/input_field.tsx';
 import { CurrencyField } from '../../bases/currency_field.tsx';
 import { SelectField } from '../../bases/select_field.tsx';
-import { FullNameField } from '../../fields/primary_info.tsx';
+import { PrimaryInfoField } from '../../fields/primary_info.tsx';
 import { HomeAddressField } from '../../fields/home_address.tsx';
 import { compileAndDownloadPdf } from '../../../../services/pdf_compiler.tsx';
 import { NY_PDF_SCHEMA } from './ny_schema.tsx';
@@ -13,9 +13,7 @@ import { NY_PDF_SCHEMA } from './ny_schema.tsx';
 export const NYStateForm: React.FC = () => {
   const { state, updatePersonalInfo, updateFilingStatus, updateIncome, updatePayments } = useTaxContext();
 
-  // Handle PDF generation using pdf-lib and the NY schema
   const handleGeneratePdf = async () => {
-    // Flatten context state into a flat record expected by the schema
     const flatFormData = {
       ...state.personalInfo,
       filingStatus: state.filingStatus,
@@ -50,15 +48,21 @@ export const NYStateForm: React.FC = () => {
           title="Step 1: Taxpayer Information"
           description="Enter your legal identification and residency details as of December 31."
         >
-          <FullNameField />
+          <PrimaryInfoField />
           <HomeAddressField />
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <InputField
               label="County of Residence"
               placeholder="e.g. Albany"
               value={state.personalInfo.countyOfResidence}
               onChange={(e) => updatePersonalInfo({ countyOfResidence: e.target.value })}
+            />
+            <InputField
+              label="School District Name"
+              placeholder="e.g. Albany City SD"
+              value={state.personalInfo.schoolDistrictName || ''}
+              onChange={(e) => updatePersonalInfo({ schoolDistrictName: e.target.value })}
             />
             <InputField
               label="School District Code"
@@ -69,10 +73,10 @@ export const NYStateForm: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* Section 2: Filing Status */}
+        {/* Section 2: Filing Status & Questions */}
         <FormSection
-          title="Step 2: Filing Status"
-          description="Select the filing status that matches your federal or state filing requirements."
+          title="Step 2: Filing Status & Special Conditions"
+          description="Select your filing status and answer required residency and compliance questions."
         >
           <SelectField
             label="Filing Status"
@@ -86,6 +90,35 @@ export const NYStateForm: React.FC = () => {
               { label: '5 - Qualifying widow(er) with dependent child', value: '5' },
             ]}
           />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <SelectField
+              label="Itemized deductions on federal return?"
+              value={state.personalInfo.itemizedDeductionsFederal || 'no'}
+              onChange={(e) =>
+                updatePersonalInfo({
+                  itemizedDeductionsFederal: e.target.value as 'yes' | 'no',
+                })
+              }
+              options={[
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+              ]}
+            />
+            <SelectField
+              label="Claimed as dependent on another return?"
+              value={state.personalInfo.claimedAsDependent || 'no'}
+              onChange={(e) =>
+                updatePersonalInfo({
+                  claimedAsDependent: e.target.value as 'yes' | 'no',
+                })
+              }
+              options={[
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+              ]}
+            />
+          </div>
         </FormSection>
 
         {/* Section 3: Income & Adjustments */}
@@ -114,10 +147,10 @@ export const NYStateForm: React.FC = () => {
           </div>
         </FormSection>
 
-        {/* Section 4: Payments & Withholdings */}
+        {/* Section 4: Payments, Refunds & Direct Deposit */}
         <FormSection
-          title="Step 4: Payments and Tax Withheld"
-          description="Enter total state and local taxes withheld from your W-2s or 1099s."
+          title="Step 4: Payments, Tax Withheld & Refund Options"
+          description="Enter total state tax withheld and specify refund or direct deposit preferences."
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <CurrencyField
@@ -129,10 +162,33 @@ export const NYStateForm: React.FC = () => {
             />
             <CurrencyField
               label="New York City Tax Withheld"
-              value={state.payments.nycTaxWithheld}
+              value={state.payments.taxWithheld}
               onChange={(e) =>
-                updatePayments({ nycTaxWithheld: parseFloat(e.target.value) || 0 })
+                updatePayments({ taxWithheld: parseFloat(e.target.value) || 0 })
               }
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <SelectField
+              label="Refund Choice"
+              value={state.payments.refundChoice || 'direct_deposit'}
+              onChange={(e) => updatePayments({ refundChoice: e.target.value })}
+              options={[
+                { label: 'Direct Deposit', value: 'direct_deposit' },
+                { label: 'Paper Check', value: 'paper_check' },
+              ]}
+            />
+            <SelectField
+              label="Bank Account Type (Line 83a)"
+              value={state.payments.accountType || 'personal_checking'}
+              onChange={(e) => updatePayments({ accountType: e.target.value })}
+              options={[
+                { label: 'Personal Checking', value: 'personal_checking' },
+                { label: 'Personal Savings', value: 'personal_savings' },
+                { label: 'Business Checking', value: 'business_checking' },
+                { label: 'Business Savings', value: 'business_savings' },
+              ]}
             />
           </div>
         </FormSection>

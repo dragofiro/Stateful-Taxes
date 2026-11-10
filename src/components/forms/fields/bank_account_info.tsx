@@ -77,7 +77,7 @@ export const BankAccountInfoField: React.FC = () => {
           placeholder="Re-enter Account Number"
           value={bankInfo.confirmAccountNumber}
           onChange={(e) => updateBank({ confirmAccountNumber: e.target.value })}
-          error={confirmError || undefined}
+          {...(confirmError ? { error: confirmError } : {})}
         />
       </div>
     </div>
