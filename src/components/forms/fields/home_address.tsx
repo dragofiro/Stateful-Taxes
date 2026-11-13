@@ -1,63 +1,65 @@
 /*
-The Home Address field should ask the user for:
+The Home Address field asks the user for their permanent home address, if it differs from the mailing address:
 - Street Address
-- City
-- State (Abreviation)
-- ZIP Code
 - Apartment/Suite Number (optional)
+- City, State (Abbreviation), ZIP Code
 */
 import React from 'react';
 import { useTaxContext } from '../../../context/tax_context.tsx';
 import { InputField } from '../bases/input_field.tsx';
+import { CheckboxField } from '../bases/checkbox_field.tsx';
+import type { FieldErrors } from './field_errors.ts';
 
-export const HomeAddressField: React.FC = () => {
+export const HomeAddressField: React.FC<{ errors?: FieldErrors }> = ({ errors = {} }) => {
   const { state, updatePersonalInfo } = useTaxContext();
   const info = state.personalInfo;
 
   return (
-    <div className="space-y-4">
-      <h4 className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">
-        Permanent Home Address
-      </h4>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="sm:col-span-2">
-          <InputField
-            label="Street Address"
-            placeholder="123 Main St"
-            value={info.mailingAddress} // Map to primary mailing/home address
-            onChange={(e) => updatePersonalInfo({ mailingAddress: e.target.value })}
-          />
-        </div>
-        <InputField
-          label="Apt / Suite Number"
-            placeholder="Apt 4B"
-            value={info.apartmentNumber || ''}
-            onChange={(e) => updatePersonalInfo({ apartmentNumber: e.target.value })}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <InputField
-          label="City"
-          placeholder="City"
-          value={info.city}
-          onChange={(e) => updatePersonalInfo({ city: e.target.value })}
-        />
-        <InputField
-          label="State"
-          placeholder="NY"
-          maxLength={2}
-          value={info.state}
-          onChange={(e) => updatePersonalInfo({ state: e.target.value })}
-        />
-        <InputField
-          label="ZIP Code"
-          placeholder="12207"
-          maxLength={5}
-          value={info.zipCode}
-          onChange={(e) => updatePersonalInfo({ zipCode: e.target.value })}
-        />
-      </div>
+    <div className="tf-stack">
+      <CheckboxField
+        label="My permanent home address is the same as my mailing address"
+        checked={info.homeSameAsMailing}
+        onChange={(e) => updatePersonalInfo({ homeSameAsMailing: e.target.checked })}
+      />
+      {!info.homeSameAsMailing && (
+        <>
+          <div className="tf-grid" style={{ gridTemplateColumns: 'minmax(0, 3fr) minmax(0, 1fr)' }}>
+            <InputField
+              label="Permanent home address"
+              hint="Do not use a PO box."
+              value={info.homeAddress}
+              error={errors['personalInfo.homeAddress']}
+              onChange={(e) => updatePersonalInfo({ homeAddress: e.target.value })}
+            />
+            <InputField
+              label="Apt."
+              optional
+              value={info.homeApartment}
+              onChange={(e) => updatePersonalInfo({ homeApartment: e.target.value })}
+            />
+          </div>
+          <div className="tf-grid" style={{ gridTemplateColumns: 'minmax(0, 3fr) 88px minmax(0, 1.4fr)' }}>
+            <InputField
+              label="City, village or post office"
+              value={info.homeCity}
+              error={errors['personalInfo.homeCity']}
+              onChange={(e) => updatePersonalInfo({ homeCity: e.target.value })}
+            />
+            <InputField
+              label="State"
+              maxLength={2}
+              value={info.homeState}
+              onChange={(e) => updatePersonalInfo({ homeState: e.target.value.toUpperCase() })}
+            />
+            <InputField
+              label="ZIP code"
+              inputMode="numeric"
+              value={info.homeZip}
+              onChange={(e) => updatePersonalInfo({ homeZip: e.target.value })}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

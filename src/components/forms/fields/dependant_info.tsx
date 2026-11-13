@@ -1,150 +1,151 @@
 /*
-Dependant Information should ask the user for:
-- First name
-- Last Name
-- Middle Initial
+Dependant Information asks the user for:
+- First name, Middle Initial, Last Name
 - Date of Birth
 - Relationship to the taxpayer
 - Social Security Number
-The user should be able to add multiple dependants (all with the information above).
+The user can add multiple dependants (all with the information above).
 */
 import React, { useState } from 'react';
 import { useTaxContext } from '../../../context/tax_context.tsx';
+import type { Dependent } from '../../../context/tax_reducer.ts';
 import { InputField } from '../bases/input_field.tsx';
 import { SelectField } from '../bases/select_field.tsx';
+import { formatSsn, maskSsn, newId, type FieldErrors } from './field_errors.ts';
 
-export interface Dependent {
-  id: string;
-  firstName: string;
-  middleInitial: string;
-  lastName: string;
-  ssn: string;
-  dateOfBirth: string;
-  relationship: string;
-}
+export type { Dependent };
+
+const RELATIONSHIPS = ['Son', 'Daughter', 'Stepchild', 'Foster child', 'Grandchild', 'Sibling', 'Parent', 'Other'];
+
+const emptyDraft = (): Omit<Dependent, 'id'> => ({
+  firstName: '',
+  middleInitial: '',
+  lastName: '',
+  ssn: '',
+  dateOfBirth: '',
+  relationship: '',
+});
 
 export const DependantInfoField: React.FC = () => {
   const { state, dispatch } = useTaxContext();
-  const dependents: Dependent[] = (state as any).dependents || [];
+  const dependents = state.dependents;
+  const [draft, setDraft] = useState(emptyDraft);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [open, setOpen] = useState(dependents.length === 0);
+  const [errors, setErrors] = useState<FieldErrors>({});
 
-  const [firstName, setFirstName] = useState('');
-  const [middleInitial, setMiddleInitial] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [ssn, setSsn] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [relationship, setRelationship] = useState('Child');
+  const set = (patch: Partial<Dependent>) => setDraft((d) => ({ ...d, ...patch }));
 
-  const handleAddDependent = () => {
-    if (!firstName || !lastName || !ssn) {
-      alert('Please fill out required dependent fields.');
-      return;
-    }
+  const save = () => {
+    const next: FieldErrors = {};
+    if (!draft.firstName.trim()) next.firstName = 'Enter a first name.';
+    if (!draft.lastName.trim()) next.lastName = 'Enter a last name.';
+    if (!/^\d{3}-\d{2}-\d{4}$/.test(draft.ssn)) next.ssn = 'Use the format 123-45-6789.';
+    if (!draft.relationship) next.relationship = 'Choose a relationship.';
+    if (!draft.dateOfBirth) next.dateOfBirth = 'Enter a date of birth.';
+    setErrors(next);
+    if (Object.keys(next).length) return;
 
-    const newDep: Dependent = {
-      id: Date.now().toString(),
-      firstName,
-      middleInitial,
-      lastName,
-      ssn,
-      dateOfBirth,
-      relationship,
-    };
-
-    dispatch({ type: 'UPDATE_DEPENDENTS', payload: [...dependents, newDep] as any });
-
-    // Reset form
-    setFirstName('');
-    setMiddleInitial('');
-    setLastName('');
-    setSsn('');
-    setDateOfBirth('');
-    setRelationship('Child');
+    const updated = editingId
+      ? dependents.map((d) => (d.id === editingId ? { ...draft, id: editingId } : d))
+      : [...dependents, { ...draft, id: newId() }];
+    dispatch({ type: 'UPDATE_DEPENDENTS', payload: updated });
+    setDraft(emptyDraft());
+    setEditingId(null);
+    setOpen(false);
   };
 
-  const handleRemoveDependent = (id: string) => {
-    const updated = dependents.filter((d) => d.id !== id);
-    dispatch({ type: 'UPDATE_DEPENDENTS', payload: updated as any });
+  const edit = (dep: Dependent) => {
+    const { id, ...rest } = dep;
+    setDraft(rest);
+    setEditingId(id);
+    setErrors({});
+    setOpen(true);
+  };
+
+  const remove = (id: string) => {
+    dispatch({ type: 'UPDATE_DEPENDENTS', payload: dependents.filter((d) => d.id !== id) });
+  };
+
+  const cancel = () => {
+    setDraft(emptyDraft());
+    setEditingId(null);
+    setErrors({});
+    setOpen(false);
   };
 
   return (
-    <div className="space-y-4">
-      <h4 className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">
-        Dependent Information (Item H)
-      </h4>
+    <div>
+      {dependents.length > 0 ? (
+        <ul className="tf-list">
+          {dependents.map((dep, idx) => (
+            <li key={dep.id} className="tf-list-item">
+              <span className="tf-list-index">{String(idx + 1).padStart(2, '0')}</span>
+              <div className="tf-list-main">
+                <div className="tf-list-title">
+                  {dep.firstName} {dep.middleInitial && `${dep.middleInitial}. `}
+                  {dep.lastName}
+                </div>
+                <div className="tf-list-meta">
+                  {dep.relationship} · {maskSsn(dep.ssn)} · born {dep.dateOfBirth}
+                </div>
+              </div>
+              <button type="button" className="tf-btn tf-btn--quiet" onClick={() => edit(dep)}>
+                Edit
+              </button>
+              <button type="button" className="tf-btn tf-btn--quiet tf-btn--danger" onClick={() => remove(dep.id)}>
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        !open && <p className="tf-empty">No dependents added. Skip this step if you have none.</p>
+      )}
 
-      {dependents.map((dep, idx) => (
-        <div key={dep.id} className="flex items-center justify-between bg-slate-950 p-3 rounded-xl border border-slate-800 text-sm">
-          <div>
-            <span className="font-semibold text-slate-200">{idx + 1}. {dep.firstName} {dep.lastName}</span>
-            <span className="text-xs text-slate-400 ml-2">({dep.relationship} • SSN: {dep.ssn})</span>
+      {open ? (
+        <div className="tf-card tf-stack">
+          <p className="tf-subhead">{editingId ? 'Edit dependent' : 'Add a dependent'}</p>
+          <div className="tf-grid" style={{ gridTemplateColumns: 'minmax(0, 2fr) 72px minmax(0, 2fr)' }}>
+            <InputField label="First name" value={draft.firstName} error={errors.firstName} onChange={(e) => set({ firstName: e.target.value })} />
+            <InputField label="M.I." maxLength={1} value={draft.middleInitial} onChange={(e) => set({ middleInitial: e.target.value.toUpperCase() })} />
+            <InputField label="Last name" value={draft.lastName} error={errors.lastName} onChange={(e) => set({ lastName: e.target.value })} />
           </div>
-          <button
-            onClick={() => handleRemoveDependent(dep.id)}
-            className="text-xs text-rose-400 hover:text-rose-300 px-2 py-1 bg-rose-500/10 rounded border border-rose-500/20"
-          >
-            Remove
-          </button>
+          <div className="tf-grid tf-grid--3">
+            <SelectField
+              label="Relationship to you"
+              value={draft.relationship}
+              error={errors.relationship}
+              onChange={(e) => set({ relationship: e.target.value })}
+              options={RELATIONSHIPS.map((r) => ({ label: r, value: r }))}
+            />
+            <InputField
+              label="SSN"
+              placeholder="123-45-6789"
+              inputMode="numeric"
+              autoComplete="off"
+              value={draft.ssn}
+              error={errors.ssn}
+              onChange={(e) => set({ ssn: formatSsn(e.target.value) })}
+            />
+            <InputField label="Date of birth" type="date" value={draft.dateOfBirth} error={errors.dateOfBirth} onChange={(e) => set({ dateOfBirth: e.target.value })} />
+          </div>
+          <div className="tf-card-actions">
+            {(dependents.length > 0 || editingId) && (
+              <button type="button" className="tf-btn tf-btn--ghost tf-btn--small" onClick={cancel}>
+                Cancel
+              </button>
+            )}
+            <button type="button" className="tf-btn tf-btn--small" onClick={save}>
+              {editingId ? 'Save changes' : 'Add dependent'}
+            </button>
+          </div>
         </div>
-      ))}
-
-      <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <InputField
-            label="First Name"
-            placeholder="Dependent First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <InputField
-            label="Middle Initial"
-            placeholder="M"
-            maxLength={1}
-            value={middleInitial}
-            onChange={(e) => setMiddleInitial(e.target.value)}
-          />
-          <InputField
-            label="Last Name"
-            placeholder="Dependent Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <InputField
-            label="Social Security Number"
-            placeholder="XXX-XX-XXXX"
-            value={ssn}
-            onChange={(e) => setSsn(e.target.value)}
-          />
-          <InputField
-            label="Date of Birth"
-            type="date"
-            value={dateOfBirth}
-            onChange={(e) => setDateOfBirth(e.target.value)}
-          />
-          <SelectField
-            label="Relationship"
-            value={relationship}
-            onChange={(e) => setRelationship(e.target.value)}
-            options={[
-              { label: 'Child', value: 'Child' },
-              { label: 'Stepchild', value: 'Stepchild' },
-              { label: 'Grandchild', value: 'Grandchild' },
-              { label: 'Sibling', value: 'Sibling' },
-              { label: 'Parent', value: 'Parent' },
-              { label: 'Other', value: 'Other' },
-            ]}
-          />
-        </div>
-
-        <button
-          onClick={handleAddDependent}
-          className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-4 py-2 rounded-lg border border-slate-700 transition"
-        >
-          + Add Dependent
+      ) : (
+        <button type="button" className="tf-btn tf-btn--ghost tf-btn--small" onClick={() => setOpen(true)}>
+          + Add a dependent
         </button>
-      </div>
+      )}
     </div>
   );
 };

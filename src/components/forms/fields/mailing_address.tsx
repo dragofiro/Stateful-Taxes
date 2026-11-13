@@ -1,81 +1,70 @@
-/* 
-The Mailing Address field should ask the user for:
+/*
+The Mailing Address field asks the user for:
 - Street Address or PO Box
-- City
-- State (Abbreviation)
-- ZIP Code
-- Country
 - Apartment/Suite Number (optional)
+- City, State (Abbreviation), ZIP Code
+- Country (only if not the United States)
  */
 import React from 'react';
 import { useTaxContext } from '../../../context/tax_context.tsx';
 import { InputField } from '../bases/input_field.tsx';
-import { CheckboxField } from '../bases/checkbox_field.tsx';
+import type { FieldErrors } from './field_errors.ts';
 
-export const MailingAddressField: React.FC = () => {
+export const MailingAddressField: React.FC<{ errors?: FieldErrors }> = ({ errors = {} }) => {
   const { state, updatePersonalInfo } = useTaxContext();
   const info = state.personalInfo;
 
-  // Optional state toggle if mailing address differs from home address
-  const [differentMailing, setDifferentMailing] = React.useState(false);
-
   return (
-    <div className="space-y-4 border-t border-slate-800 pt-4 mt-4">
-      <CheckboxField
-        label="Mailing address is different from permanent home address"
-        checked={differentMailing}
-        onChange={(e) => setDifferentMailing(e.target.checked)}
+    <div className="tf-stack">
+      <div className="tf-grid" style={{ gridTemplateColumns: 'minmax(0, 3fr) minmax(0, 1fr)' }}>
+        <InputField
+          label="Street address or PO box"
+          autoComplete="address-line1"
+          value={info.mailingAddress}
+          error={errors['personalInfo.mailingAddress']}
+          onChange={(e) => updatePersonalInfo({ mailingAddress: e.target.value })}
+        />
+        <InputField
+          label="Apt."
+          optional
+          autoComplete="address-line2"
+          value={info.apartmentNumber ?? ''}
+          onChange={(e) => updatePersonalInfo({ apartmentNumber: e.target.value })}
+        />
+      </div>
+      <div className="tf-grid" style={{ gridTemplateColumns: 'minmax(0, 3fr) 88px minmax(0, 1.4fr)' }}>
+        <InputField
+          label="City, village or post office"
+          autoComplete="address-level2"
+          value={info.city}
+          error={errors['personalInfo.city']}
+          onChange={(e) => updatePersonalInfo({ city: e.target.value })}
+        />
+        <InputField
+          label="State"
+          maxLength={2}
+          autoComplete="address-level1"
+          value={info.state}
+          error={errors['personalInfo.state']}
+          onChange={(e) => updatePersonalInfo({ state: e.target.value.toUpperCase() })}
+        />
+        <InputField
+          label="ZIP code"
+          inputMode="numeric"
+          autoComplete="postal-code"
+          value={info.zipCode}
+          error={errors['personalInfo.zipCode']}
+          onChange={(e) => updatePersonalInfo({ zipCode: e.target.value })}
+        />
+      </div>
+      <InputField
+        label="Country"
+        optional
+        hint="Leave empty for an address in the United States."
+        autoComplete="country-name"
+        value={info.country}
+        onChange={(e) => updatePersonalInfo({ country: e.target.value })}
       />
-
-      {differentMailing && (
-        <div className="space-y-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="sm:col-span-2">
-              <InputField
-                label="Street Address or PO Box"
-                placeholder="PO Box 456"
-                value={info.mailingAddress || ''}
-                onChange={(e) => updatePersonalInfo({ mailingAddress: e.target.value })}
-              />
-            </div>
-            <InputField
-              label="Apt / Suite Number"
-              placeholder="Ste 100"
-              value={info.apartmentNumber || ''}
-              onChange={(e) => updatePersonalInfo({ apartmentNumber: e.target.value })}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-            <InputField
-              label="City"
-              placeholder="City"
-              value={info.city || ''}
-              onChange={(e) => updatePersonalInfo({ city: e.target.value })}
-            />
-            <InputField
-              label="State"
-              placeholder="NY"
-              maxLength={2}
-              value={info.state || ''}
-              onChange={(e) => updatePersonalInfo({ state: e.target.value })}
-            />
-            <InputField
-              label="ZIP Code"
-              placeholder="12207"
-              maxLength={5}
-              value={info.zipCode || ''}
-              onChange={(e) => updatePersonalInfo({ zipCode: e.target.value })}
-            />
-            <InputField
-              label="Country"
-              placeholder="USA"
-              value={info.country || 'USA'}
-              onChange={(e) => updatePersonalInfo({ country: e.target.value })}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
