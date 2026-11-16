@@ -1,3 +1,4 @@
+import type React from 'react';
 /*import { AKStateForm } from './AK/index.tsx';
 import { ALStateForm } from './AL/index.tsx';
 import { ARStateForm } from './AR/index.tsx';
@@ -49,7 +50,20 @@ import { WIStateForm } from './WI/index.tsx';
 import { WVStateForm } from './WV/index.tsx';
 import { WYStateForm } from './WY/index.tsx';*/
 
-export const STATE_REGISTRY = {
+/** Props every state workflow receives from the app shell. */
+export interface StateFormProps {
+  onBack?: () => void;
+}
+
+export interface StateRegistryEntry {
+  name: string;
+  code: string;
+  formName: string;
+  component: React.ComponentType<StateFormProps>;
+  status: 'Available' | 'Coming Soon' | 'N/A';
+}
+
+export const STATE_REGISTRY: Partial<Record<string, StateRegistryEntry>> = {
   /*AK: { name: 'Alaska', code: 'AK', formName: 'Form Form', component: AKStateForm, status: 'Available' },
   AL: { name: 'Alabama', code: 'AL', formName: 'Form 40', component: ALStateForm, status: 'Available' },
   AR: { name: 'Arkansas', code: 'AR', formName: 'Form AR1000F', component: ARStateForm, status: 'Available' },
@@ -83,7 +97,7 @@ export const STATE_REGISTRY = {
   NJ: { name: 'New Jersey', code: 'NJ', formName: 'Form NJ-1040', component: NJStateForm, status: 'Available' },
   NM: { name: 'New Mexico', code: 'NM', formName: 'Form PIT-1', component: NMStateForm, status: 'Available' },
   NV: { name: 'Nevada', code: 'NV', formName: 'None', component: NVStateForm, status: 'Available' },*/
-  NY: { name: 'New York', code: 'NY', formName: 'IT-201', component: NYStateForm, status: 'Available' },
+  NY: { name: 'New York', code: 'NY', formName: 'IT-201 / IT-203', component: NYStateForm, status: 'Available' },
 /*  OH: { name: 'Ohio', code: 'OH', formName: 'Form IT 1040', component: OHStateForm, status: 'Available' },
   OK: { name: 'Oklahoma', code: 'OK', formName: 'Form 511', component: OKStateForm, status: 'Available' },
   OR: { name: 'Oregon', code: 'OR', formName: 'Form OR-40', component: ORStateForm, status: 'Available' },

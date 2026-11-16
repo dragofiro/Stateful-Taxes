@@ -1,23 +1,41 @@
-import React from 'react';
+// Text input with a label, an optional hint and an error message.
+import React, { useId } from 'react';
 
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  error?: string;
+  hint?: string | undefined;
+  error?: string | undefined;
+  optional?: boolean;
 }
 
-export const InputField: React.FC<InputFieldProps> = ({ label, error, className = '', ...props }) => {
+export const InputField: React.FC<InputFieldProps> = ({ label, hint, error, optional, className = '', id, ...props }) => {
+  const autoId = useId();
+  const inputId = id ?? autoId;
+  const hintId = hint ? `${inputId}-hint` : undefined;
+  const errorId = error ? `${inputId}-error` : undefined;
   return (
-    <div className="space-y-1.5">
-      <label className="block text-xs font-medium text-slate-300">{label}</label>
+    <div className="tf-field" data-invalid={error ? 'true' : undefined}>
+      <label className="tf-label" htmlFor={inputId}>
+        {label}
+        {optional && <span className="tf-optional">Optional</span>}
+      </label>
       <input
-        className={`w-full bg-slate-950 border rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:ring-1 transition ${
-          error
-            ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
-            : 'border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20'
-        } ${className}`}
+        id={inputId}
+        className={`tf-input ${className}`}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={[hintId, errorId].filter(Boolean).join(' ') || undefined}
         {...props}
       />
-      {error && <p className="text-xs text-rose-400 mt-1">{error}</p>}
+      {hint && (
+        <p className="tf-hint" id={hintId}>
+          {hint}
+        </p>
+      )}
+      {error && (
+        <p className="tf-error" id={errorId}>
+          {error}
+        </p>
+      )}
     </div>
   );
 };

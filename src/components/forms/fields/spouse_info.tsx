@@ -1,63 +1,62 @@
 /*
-The Spouse Information field should ask the user for:
-- First Name
-- Last Name
-- Date of Birth
+The Spouse Information field asks the user for:
+- First Name, Middle Initial, Last Name
 - Social Security Number
+- Date of Birth
 - Date of Death (if applicable)
  */
 import React from 'react';
 import { useTaxContext } from '../../../context/tax_context.tsx';
 import { InputField } from '../bases/input_field.tsx';
+import { formatSsn, type FieldErrors } from './field_errors.ts';
 
-export const SpouseInfoField: React.FC = () => {
+export const SpouseInfoField: React.FC<{ errors?: FieldErrors }> = ({ errors = {} }) => {
   const { state, updatePersonalInfo } = useTaxContext();
   const info = state.personalInfo;
 
   return (
-    <div className="space-y-4 border-t border-slate-800 pt-4 mt-4">
-      <h4 className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">
-        Spouse Information (For Married Filing Joint/Separate)
-      </h4>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div className="tf-stack">
+      <div className="tf-grid" style={{ gridTemplateColumns: 'minmax(0, 2fr) 72px minmax(0, 2fr)' }}>
         <InputField
-          label="Spouse First Name"
-          placeholder="e.g. Jane"
-          value={info.spouseFirstName || ''}
+          label="Spouse's first name"
+          value={info.spouseFirstName ?? ''}
+          error={errors['personalInfo.spouseFirstName']}
           onChange={(e) => updatePersonalInfo({ spouseFirstName: e.target.value })}
         />
         <InputField
-          label="Spouse Middle Initial"
-          placeholder="B"
+          label="M.I."
           maxLength={1}
-          value={info.spouseMiddleInitial || ''}
-          onChange={(e) => updatePersonalInfo({ spouseMiddleInitial: e.target.value })}
+          value={info.spouseMiddleInitial ?? ''}
+          onChange={(e) => updatePersonalInfo({ spouseMiddleInitial: e.target.value.toUpperCase() })}
         />
         <InputField
-          label="Spouse Last Name"
-          placeholder="e.g. Doe"
-          value={info.spouseLastName || ''}
+          label="Spouse's last name"
+          value={info.spouseLastName ?? ''}
+          error={errors['personalInfo.spouseLastName']}
           onChange={(e) => updatePersonalInfo({ spouseLastName: e.target.value })}
         />
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="tf-grid tf-grid--3">
         <InputField
-          label="Spouse SSN"
-          placeholder="XXX-XX-XXXX"
-          value={info.spouseSsn || ''}
-          onChange={(e) => updatePersonalInfo({ spouseSsn: e.target.value })}
+          label="Spouse's SSN"
+          placeholder="123-45-6789"
+          inputMode="numeric"
+          autoComplete="off"
+          value={info.spouseSsn ?? ''}
+          error={errors['personalInfo.spouseSsn']}
+          onChange={(e) => updatePersonalInfo({ spouseSsn: formatSsn(e.target.value) })}
         />
         <InputField
-          label="Spouse Date of Birth"
+          label="Spouse's date of birth"
           type="date"
-          value={info.spouseDateOfBirth || ''}
+          value={info.spouseDateOfBirth ?? ''}
           onChange={(e) => updatePersonalInfo({ spouseDateOfBirth: e.target.value })}
         />
         <InputField
-          label="Spouse Date of Death (if applicable)"
+          label="Spouse's date of death"
           type="date"
-          value={info.spouseDateOfDeath || ''}
+          optional
+          value={info.spouseDateOfDeath ?? ''}
           onChange={(e) => updatePersonalInfo({ spouseDateOfDeath: e.target.value })}
         />
       </div>

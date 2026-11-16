@@ -1,19 +1,25 @@
+// A titled group of fields inside a step.
 import React, { type ReactNode } from 'react';
 
 interface FormSectionProps {
   title: string;
-  description?: string;
+  description?: ReactNode;
+  /** Short reference shown at the right of the title, for example the form line numbers. */
+  tag?: string;
   children: ReactNode;
 }
 
-export const FormSection: React.FC<FormSectionProps> = ({ title, description, children }) => {
+export const FormSection: React.FC<FormSectionProps> = ({ title, description, tag, children }) => {
   return (
-    <div className="bg-slate-900/90 border border-slate-800/80 rounded-xl p-5 space-y-4 shadow-sm">
-      <div>
-        <h3 className="text-sm font-semibold text-indigo-400 uppercase tracking-wider">{title}</h3>
-        {description && <p className="text-xs text-slate-400 mt-0.5">{description}</p>}
+    <section className="tf-section">
+      <div className="tf-section-head">
+        <div>
+          <h2 className="tf-section-title">{title}</h2>
+          {description && <p className="tf-section-desc">{description}</p>}
+        </div>
+        {tag && <span className="tf-section-tag">{tag}</span>}
       </div>
-      <div className="space-y-4">{children}</div>
-    </div>
+      <div className="tf-stack">{children}</div>
+    </section>
   );
 };

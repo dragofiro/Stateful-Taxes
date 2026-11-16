@@ -1,0 +1,89 @@
+/* Mobile notice: a toast at the bottom of the screen over a dimmed page. */
+.mn-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(14, 17, 22, 0.45);
+}
+
+.mn-toast {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #0e1116;
+  box-shadow: 0 12px 40px rgba(14, 17, 22, 0.25);
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  animation: mn-rise 180ms ease-out;
+}
+
+.mn-title {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.mn-body {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #3a404b;
+}
+
+.mn-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.mn-btn {
+  flex: 1;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.mn-btn:focus-visible {
+  outline: 2px solid #0e1116;
+  outline-offset: 2px;
+}
+
+.mn-btn--okay {
+  background: #1d4ed8;
+  font-weight: 700;
+}
+
+.mn-btn--okay:hover {
+  background: #1e40af;
+}
+
+.mn-btn--leave {
+  background: #6b7280;
+  font-weight: 400;
+}
+
+.mn-btn--leave:hover {
+  background: #4b5563;
+}
+
+@keyframes mn-rise {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mn-toast {
+    animation: none;
+  }
+}

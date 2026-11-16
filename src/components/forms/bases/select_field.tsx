@@ -1,4 +1,5 @@
-import React from 'react';
+// Drop-down list with a label, an optional hint and an error message.
+import React, { useId } from 'react';
 
 interface Option {
   label: string;
@@ -8,31 +9,40 @@ interface Option {
 interface SelectFieldProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   options: Option[];
-  error?: string;
+  hint?: string | undefined;
+  error?: string | undefined;
+  placeholder?: string;
 }
 
-export const SelectField: React.FC<SelectFieldProps> = ({ label, options, error, className = '', ...props }) => {
+export const SelectField: React.FC<SelectFieldProps> = ({
+  label,
+  options,
+  hint,
+  error,
+  placeholder = 'Select an option',
+  className = '',
+  id,
+  ...props
+}) => {
+  const autoId = useId();
+  const selectId = id ?? autoId;
   return (
-    <div className="space-y-1.5">
-      <label className="block text-xs font-medium text-slate-300">{label}</label>
-      <select
-        className={`w-full bg-slate-950 border rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-1 transition ${
-          error
-            ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20'
-            : 'border-slate-800 focus:border-indigo-500 focus:ring-indigo-500/20'
-        } ${className}`}
-        {...props}
-      >
+    <div className="tf-field" data-invalid={error ? 'true' : undefined}>
+      <label className="tf-label" htmlFor={selectId}>
+        {label}
+      </label>
+      <select id={selectId} className={`tf-select ${className}`} aria-invalid={error ? true : undefined} {...props}>
         <option value="" disabled>
-          Select an option...
+          {placeholder}
         </option>
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value} className="bg-slate-900 text-slate-200">
+          <option key={opt.value} value={opt.value}>
             {opt.label}
           </option>
         ))}
       </select>
-      {error && <p className="text-xs text-rose-400 mt-1">{error}</p>}
+      {hint && <p className="tf-hint">{hint}</p>}
+      {error && <p className="tf-error">{error}</p>}
     </div>
   );
 };
