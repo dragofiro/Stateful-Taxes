@@ -1,31 +1,50 @@
 import { type NYTaxFormValues } from './ny_types.ts';
 
-export const NY_PDF_SCHEMA: Record<keyof NYTaxFormValues, string> = {
-  firstName: 'TopmostSubform[0].Page1[0].Filer_FirstName[0]',
-  middleInitial: 'TopmostSubform[0].Page1[0].Filer_MI[0]',
-  lastName: 'TopmostSubform[0].Page1[0].Filer_LastName[0]',
-  ssn: 'TopmostSubform[0].Page1[0].Filer_SSN[0]',
+export const NY_PDF_SCHEMA: Record<keyof NYTaxFormValues | string, string> = {
+  fiscalYearStart: 'Fiscal_year_start',
+  fiscalYearEnd: 'Fiscal_year_end',
+  tpFirstName: 'TP_first_name',
+  tpMi: 'TP_MI',
+  tpLastName: 'TP_last_name',
+  tpDob: 'TP_DOB',
+  tpSsn: 'TP_SSN',
+  tpDateDeath: 'TP_date_death',
   
-  spouseFirstName: 'TopmostSubform[0].Page1[0].Spouse_FirstName[0]',
-  spouseMiddleInitial: 'TopmostSubform[0].Page1[0].Spouse_MI[0]',
-  spouseLastName: 'TopmostSubform[0].Page1[0].Spouse_LastName[0]',
-  spouseSsn: 'TopmostSubform[0].Page1[0].Spouse_SSN[0]',
+  spouseFirstName: 'Spouse_first_name',
+  spouseMi: 'Spouse_MI',
+  spouseLastName: 'Spouse_last_name',
+  spouseDob: 'Spouse_DOB',
+  spouseSsn: 'Spouse_SSN',
+  spouseDateDeath: 'Spouse_date_death',
 
-  mailingAddress: 'TopmostSubform[0].Page1[0].Address_Street[0]',
-  apartmentNumber: 'TopmostSubform[0].Page1[0].Address_Apt[0]',
-  city: 'TopmostSubform[0].Page1[0].Address_City[0]',
-  state: 'TopmostSubform[0].Page1[0].Address_State[0]',
-  zipCode: 'TopmostSubform[0].Page1[0].Address_Zip[0]',
-  
-  countyOfResidence: 'TopmostSubform[0].Page1[0].County_Resident[0]',
-  schoolDistrictCode: 'TopmostSubform[0].Page1[0].School_District_Code[0]',
-  nycMonthsLived: 'TopmostSubform[0].Page1[0].NYC_Months[0]',
+  tpHomeAddress: 'TP_home_address',
+  tpHomeApt: 'TP_home_apt',
+  tpHomeCity: 'TP_home_city',
+  tpHomeZip: 'TP_home_zip',
 
-  filingStatus: 'TopmostSubform[0].Page1[0].Filing_Status_Boxes[0]',
-  federalAdjustedGrossIncome: 'TopmostSubform[0].Page1[0].Line19_FederalAGI[0]',
-  nyAdditions: 'TopmostSubform[0].Page1[0].Line20_Additions[0]',
-  nySubtractions: 'TopmostSubform[0].Page1[0].Line22_Subtractions[0]',
+  tpMailAddress: 'TP_mail_address',
+  tpMailApt: 'TP_mail_apt',
+  tpMailCity: 'TP_mail_city',
+  tpMailState: 'TP_mail_state',
+  tpMailZip: 'TP_mail_zip',
+  tpMailCountry: 'TP_mail_country',
   
-  stateTaxWithheld: 'TopmostSubform[0].Page2[0].Line70_StateWithheld[0]',
-  nycTaxWithheld: 'TopmostSubform[0].Page2[0].Line71_NYCWithheld[0]',
+  nysCountyResidence: 'NYS_county_residence',
+  sdName: 'SD_name',
+  sdCode: 'SD_code',
+  
+  filingStatus: 'Filing_status',
+  itemized: 'Itemized',
+  dependent: 'Dependent',
+  foreignAccount: 'Foreign_account',
+  
+  line19: 'Line19',
+  line20: 'Line20',
+  line22: 'Line22',
+  
+  line70: 'Line70',
+  line71: 'Line71',
+  
+  line83bRouting: 'Line83b_routing',
+  line83cAccountNum: 'Line83c_account_num',
 };

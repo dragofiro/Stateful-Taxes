@@ -1,36 +1,62 @@
 export type FilingStatusNY = '1' | '2' | '3' | '4' | '5'; 
-// 1 = Single, 2 = Married filing joint, 3 = Married filing separate, 4 = Head of household, 5 = Qualifying widow(er)
 
-export interface NYTaxFormValues {
-  // Personal Information (Step 1)
+export type AccountTypeNY = 'personal_checking' | 'personal_savings' | 'business_checking' | 'business_savings';
+export type RefundChoiceNY = 'direct_deposit' | 'paper_check';
+
+export interface DependentNY {
   firstName: string;
   middleInitial: string;
   lastName: string;
+  relationship: string;
   ssn: string;
+  dateOfBirth: string;
+}
+
+export interface NYTaxFormValues {
+  fiscalYearStart?: string;
+  fiscalYearEnd?: string;
+  tpFirstName: string;
+  tpMi: string;
+  tpLastName: string;
+  tpDob?: string;
+  tpSsn: string;
+  tpDateDeath?: string;
   
   spouseFirstName?: string;
-  spouseMiddleInitial?: string;
+  spouseMi?: string;
   spouseLastName?: string;
+  spouseDob?: string;
   spouseSsn?: string;
+  spouseDateDeath?: string;
 
-  mailingAddress: string;
-  apartmentNumber?: string;
-  city: string;
-  state: string;
-  zipCode: string;
+  tpHomeAddress: string;
+  tpHomeApt?: string;
+  tpHomeCity: string;
+  tpHomeZip: string;
+
+  tpMailAddress: string;
+  tpMailApt?: string;
+  tpMailCity: string;
+  tpMailState: string;
+  tpMailZip: string;
+  tpMailCountry?: string;
   
-  // Residency & Local Info
-  countyOfResidence: string;
-  schoolDistrictCode: string;
-  nycMonthsLived: string; // Item F
+  nysCountyResidence: string;
+  sdName?: string;
+  sdCode: string;
 
-  // Filing Status & Income (Step 2 & 3)
   filingStatus: FilingStatusNY;
-  federalAdjustedGrossIncome: number;
-  nyAdditions: number;
-  nySubtractions: number;
+  itemized: boolean;
+  dependent: boolean;
+  foreignAccount: boolean;
+
+  line19: number;
+  line20: number;
+  line22: number;
   
-  // Payments & Withholding
-  stateTaxWithheld: number;
-  nycTaxWithheld: number;
+  line70: number;
+  line71: number;
+
+  line83bRouting?: string;
+  line83cAccountNum?: string;
 }

@@ -55,6 +55,7 @@ export const BankAccountInfoField: React.FC = () => {
           value={bankInfo.confirmAccountNumber}
           error={mismatch}
           onChange={(e) => updateBank({ confirmAccountNumber: e.target.value })}
+          {...(confirmError ? { error: confirmError } : {})}
         />
       </div>
     </div>
