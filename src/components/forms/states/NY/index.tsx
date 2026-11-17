@@ -1,4 +1,14 @@
-import React from 'react';
+// New York filing workflow: the beginning stage (residency, filer, household) and the middle stage
+// (income, New York adjustments, deductions, credits, payments), with a running estimate beside each step.
+// The final stage (review, sign and print the PDF) comes later.
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '../../bases/forms.css';
 import { useTaxContext } from '../../../../context/tax_context.tsx';
 import { FormWrapper } from '../../bases/form_wrapper.tsx';
 import { FormSection } from '../../bases/form_section.tsx';
@@ -82,6 +92,9 @@ export const NYStateForm: React.FC = () => {
       alert('Failed to generate New York IT-201 PDF template locally.');
     }
   };
+
+  const stepProps = { errors, estimate };
+  const nextStep = NY_STEPS[index + 1];
 
   return (
     <FormWrapper
@@ -195,8 +208,52 @@ export const NYStateForm: React.FC = () => {
           <BankAccountInfoField />
         </FormSection>
 
+            {current === 'start' && <ResidencyStep {...stepProps} />}
+            {current === 'filer' && <FilerStep {...stepProps} />}
+            {current === 'household' && <HouseholdStep {...stepProps} />}
+            {current === 'income' && <IncomeStep {...stepProps} />}
+            {current === 'ny-adjustments' && <AdjustmentsStep {...stepProps} />}
+            {current === 'deductions' && <DeductionsStep {...stepProps} />}
+            {current === 'credits' && <CreditsStep {...stepProps} />}
+            {current === 'payments' && <PaymentsStep {...stepProps} />}
+            {current === 'checkpoint' && <CheckpointStep {...stepProps} onEdit={go} onSaveJson={saveJson} />}
+          </FormWrapper>
+
+          <nav className="tf-step-nav" aria-label="Step navigation">
+            {index > 0 ? (
+              <button type="button" className="tf-btn tf-btn--ghost" onClick={back}>
+                ← Back
+              </button>
+            ) : (
+              <span />
+            )}
+            {nextStep ? (
+              <div className="tf-step-nav-next">
+                <span className="tf-step-nav-label">Next: {nextStep.navLabel}</span>
+                <button type="button" className="tf-btn" onClick={next}>
+                  Continue →
+                </button>
+              </div>
+            ) : (
+              <button type="button" className="tf-btn" disabled title="Review and printing come in the next stage.">
+                Review and print (coming soon)
+              </button>
+            )}
+          </nav>
+        </main>
+
+        <EstimateRail
+          estimate={estimate}
+          showCity={state.residency.nyc === 'full'}
+          showYonkers={state.residency.yonkers === 'full'}
+        />
       </div>
-    </FormWrapper>
+
+      <footer className="tf-footer">
+        Everything you enter stays on your computer. Stateful Taxes is not affiliated with the IRS or the New York State
+        Department of Taxation and Finance. Check every form before you mail it.
+      </footer>
+    </div>
   );
 };
 

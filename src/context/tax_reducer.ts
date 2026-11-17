@@ -1,4 +1,5 @@
 export interface TaxState {
+  version: 2;
   personalInfo: {
     spouseDateOfBirth: string;
     spouseDateOfDeath: string;
@@ -7,10 +8,15 @@ export interface TaxState {
     middleInitial: string;
     lastName: string;
     ssn: string;
+    dateOfBirth: string;
+    dateOfDeath: string;
     spouseFirstName?: string;
     spouseMiddleInitial?: string;
     spouseLastName?: string;
     spouseSsn?: string;
+    spouseDateOfBirth?: string;
+    spouseDateOfDeath?: string;
+    /** Mailing address. */
     mailingAddress: string;
     apartmentNumber?: string;
     city: string;
@@ -24,11 +30,49 @@ export interface TaxState {
     itemizedDeductionsFederal?: 'yes' | 'no';
     claimedAsDependent?: 'yes' | 'no';
   };
-  filingStatus: string;
+  residency: {
+    status: ResidencyStatus;
+    nyc: LocalResidency;
+    yonkers: LocalResidency;
+    /** Part-year residents: the dates they moved into or out of New York State. */
+    movedInDate: string;
+    movedOutDate: string;
+    /** Nonresidents: their state of residence. */
+    otherStateOfResidence: string;
+    /** Someone else can claim the filer as a dependent (Item C). */
+    claimedAsDependent: boolean;
+  };
+  filingStatus: FilingStatus;
+  dependents: Dependent[];
+  employers: EmployerWithholding[];
   income: {
-    federalAdjustedGrossIncome: number;
-    nyAdditions: number;
-    nySubtractions: number;
+    lines: Record<IncomeLineKey, AmountPair>;
+    /** Line 18, total federal adjustments to income. */
+    adjustments: AmountPair;
+  };
+  modifications: {
+    additions: Record<AdditionKey, AmountPair>;
+    subtractions: Record<SubtractionKey, AmountPair>;
+  };
+  deductions: {
+    choice: 'standard' | 'itemized';
+    /** New York itemized deduction from Form IT-196. */
+    itemizedAmount: number;
+  };
+  credits: {
+    /** Federal earned income credit, used to compute the New York EITC. */
+    federalEic: number;
+    /** Part-year residents: the EITC from Form IT-215. */
+    nysEitcOverride: number;
+    residentCredit: number;
+    otherNonrefundable: number;
+    empireStateChildCredit: number;
+    childCareCredit: number;
+    collegeTuitionCredit: number;
+    realPropertyCredit: number;
+    otherRefundable: number;
+    nycOtherNonrefundable: number;
+    nycEitc: number;
   };
   payments: {
     refundChoice: string;
@@ -101,8 +145,16 @@ export const initialTaxState: TaxState = {
 
 export type TaxAction =
   | { type: 'UPDATE_PERSONAL_INFO'; payload: Partial<TaxState['personalInfo']> }
-  | { type: 'UPDATE_FILING_STATUS'; payload: string }
-  | { type: 'UPDATE_INCOME'; payload: Partial<TaxState['income']> }
+  | { type: 'UPDATE_FILING_STATUS'; payload: FilingStatus }
+  | { type: 'UPDATE_RESIDENCY'; payload: Partial<TaxState['residency']> }
+  | { type: 'UPDATE_DEPENDENTS'; payload: Dependent[] }
+  | { type: 'UPDATE_EMPLOYERS'; payload: EmployerWithholding[] }
+  | { type: 'UPDATE_INCOME_LINE'; key: IncomeLineKey; payload: Partial<AmountPair> }
+  | { type: 'UPDATE_ADJUSTMENTS'; payload: Partial<AmountPair> }
+  | { type: 'UPDATE_ADDITION'; key: AdditionKey; payload: Partial<AmountPair> }
+  | { type: 'UPDATE_SUBTRACTION'; key: SubtractionKey; payload: Partial<AmountPair> }
+  | { type: 'UPDATE_DEDUCTIONS'; payload: Partial<TaxState['deductions']> }
+  | { type: 'UPDATE_CREDITS'; payload: Partial<TaxState['credits']> }
   | { type: 'UPDATE_PAYMENTS'; payload: Partial<TaxState['payments']> }
   | { type: 'UPDATE_BANK_INFO'; payload: Partial<TaxState['bankInfo']> }
   | { type: 'UPDATE_DEPENDENTS'; payload: TaxState['dependents'] }
@@ -127,9 +179,9 @@ export function taxReducer(state: TaxState, action: TaxAction): TaxState {
     case 'UPDATE_EMPLOYERS':
       return { ...state, employers: action.payload };
     case 'LOAD_FULL_DATA':
-      return action.payload;
+      return normalizeTaxState(action.payload);
     case 'RESET_FORM':
-      return initialTaxState;
+      return createInitialTaxState();
     default:
       return state;
   }
