@@ -20,12 +20,54 @@ export const NYStateForm: React.FC = () => {
   const { state, updatePersonalInfo, updateFilingStatus, updateIncome, updatePayments } = useTaxContext();
 
   const handleGeneratePdf = async () => {
+    // Map tax state property names to the exact keys defined in NY_PDF_SCHEMA
     const flatFormData = {
-      ...state.personalInfo,
+      fiscalYearStart: '',
+      fiscalYearEnd: '',
+      tpFirstName: state.personalInfo.firstName,
+      tpMi: state.personalInfo.middleInitial,
+      tpLastName: state.personalInfo.lastName,
+      tpDob: state.personalInfo.dateOfBirth,
+      tpSsn: state.personalInfo.ssn,
+      tpDateDeath: state.personalInfo.spouseDateOfDeath,
+      
+      spouseFirstName: state.personalInfo.spouseFirstName,
+      spouseMi: state.personalInfo.spouseMiddleInitial,
+      spouseLastName: state.personalInfo.spouseLastName,
+      spouseDob: state.personalInfo.spouseDateOfBirth,
+      spouseSsn: state.personalInfo.spouseSsn,
+      spouseDateDeath: state.personalInfo.spouseDateOfDeath,
+
+      tpHomeAddress: state.personalInfo.mailingAddress,
+      tpHomeApt: state.personalInfo.apartmentNumber,
+      tpHomeCity: state.personalInfo.city,
+      tpHomeZip: state.personalInfo.zipCode,
+
+      tpMailAddress: state.personalInfo.mailingAddress,
+      tpMailApt: state.personalInfo.apartmentNumber,
+      tpMailCity: state.personalInfo.city,
+      tpMailState: state.personalInfo.state,
+      tpMailZip: state.personalInfo.zipCode,
+      tpMailCountry: state.personalInfo.country,
+      
+      nysCountyResidence: state.personalInfo.countyOfResidence,
+      sdName: state.personalInfo.schoolDistrictName,
+      sdCode: state.personalInfo.schoolDistrictCode,
+      
       filingStatus: state.filingStatus,
-      ...state.income,
-      ...state.payments,
-      ...state.bankInfo,
+      itemized: state.personalInfo.itemizedDeductionsFederal === 'yes',
+      dependent: state.personalInfo.claimedAsDependent === 'yes',
+      foreignAccount: false,
+      
+      line19: state.income.federalAdjustedGrossIncome,
+      line20: state.income.nyAdditions,
+      line22: state.income.nySubtractions,
+      
+      line70: state.payments.stateTaxWithheld,
+      line71: state.payments.taxWithheld,
+      
+      line83bRouting: state.bankInfo.routingNumber,
+      line83cAccountNum: state.bankInfo.accountNumber,
     };
 
     try {
@@ -93,7 +135,7 @@ export const NYStateForm: React.FC = () => {
 
         {/* Step 4: Dependents */}
         <FormSection
-          title="Step 4: Dependents (Item H)"
+          title="Step 4: Dependents"
           description="List any qualifying dependents to claim exemptions."
         >
           <DependantInfoField />
